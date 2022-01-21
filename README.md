@@ -10,8 +10,12 @@ A standard chess board is an 8x8 square on which the chess pieces are placed. Fo
 we will use a coordinate system (x,y) to label each square on the chessboard, where (1,1) is the 
 bottom left, and (8,8) is the top right.
 
+![Chess Grid](https://github.com/aasmc/KnightsTour/blob/master/art/grid.png?raw=true)
+
 The knight is a chess piece. It moves in an L-shape and can jump over other pieces. It has to 
 move 2 squares horizontally and 1 square vertically, or 2 squares vertically and 1 square horizontally.
+
+![Knight's moves](https://github.com/aasmc/KnightsTour/blob/master/art/knightmove.png?raw=true)
 
 ### The rules of the knight's tour are as follows:
 
