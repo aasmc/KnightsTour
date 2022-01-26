@@ -151,47 +151,60 @@ def get_new_row(old_row, new_knight_pos, cell_size, max_row, symbol):
     return new_row
 
 
-def process_moves(moves, rows, knight_x, knight_y, cell_size, num_rows, num_cols):
+def get_row_index_knight_pos(move, knight_x, knight_y):
     row_index = -1
     new_knight_pos = -1
+    if move == "FORWARD_LEFT":
+        row_index = knight_y + 2
+        new_knight_pos = knight_x - 1
+    elif move == "LEFT_FORWARD":
+        row_index = knight_y + 1
+        new_knight_pos = knight_x - 2
+    elif move == "LEFT_BACK":
+        row_index = knight_y - 1
+        new_knight_pos = knight_x - 2
+    elif move == "BACK_LEFT":
+        row_index = knight_y - 2
+        new_knight_pos = knight_x - 1
+    elif move == "BACK_RIGHT":
+        row_index = knight_y - 2
+        new_knight_pos = knight_x + 1
+    elif move == "RIGHT_BACK":
+        row_index = knight_y - 1
+        new_knight_pos = knight_x + 2
+    elif move == "RIGHT_FORWARD":
+        row_index = knight_y + 1
+        new_knight_pos = knight_x + 2
+    elif move == "FORWARD_RIGHT":
+        row_index = knight_y + 2
+        new_knight_pos = knight_x + 1
+    return (row_index, new_knight_pos)
+
+
+def process_moves(moves, rows, knight_x, knight_y, cell_size, num_cols, num_rows):
     for move in moves:
-        if move == "FORWARD_LEFT":
-            row_index = knight_y + 2
-            new_knight_pos = knight_x - 1
-        elif move == "LEFT_FORWARD":
-            row_index = knight_y + 1
-            new_knight_pos = knight_x - 2
-        elif move == "LEFT_BACK":
-            row_index = knight_y - 1
-            new_knight_pos = knight_x - 2
-        elif move == "BACK_LEFT":
-            row_index = knight_y - 2
-            new_knight_pos = knight_x - 1
-        elif move == "BACK_RIGHT":
-            row_index = knight_y - 2
-            new_knight_pos = knight_x + 1
-        elif move == "RIGHT_BACK":
-            row_index = knight_y - 1
-            new_knight_pos = knight_x + 2
-        elif move == "RIGHT_FORWARD":
-            row_index = knight_y + 1
-            new_knight_pos = knight_x + 2
-        elif move == "FORWARD_RIGHT":
-            row_index = knight_y + 2
-            new_knight_pos = knight_x + 1
+        index_position = get_row_index_knight_pos(move, knight_x, knight_y)
+        row_index = index_position[0]
+        new_knight_pos = index_position[1]
+        # rows are stored in opposite order
         old_row = rows[-row_index]
+        symbol = get_possible_moves(
+            new_knight_pos,
+            row_index,
+            num_rows,
+            num_cols)
+        symbol = len(symbol) - 1
         new_row = get_new_row(
             old_row,
             new_knight_pos,
             cell_size,
             num_cols,
-            "O")
+            symbol)
         rows[-row_index] = new_row
 
 
-def process_rows(rows, knight_x, knight_y, num_cols, num_rows, cell_size):
-    moves = get_possible_moves(knight_x, knight_y, num_rows, num_cols)
-    process_moves(moves, rows, knight_x, knight_y, cell_size, num_rows, num_cols)
+def process_rows(moves, rows, knight_x, knight_y, num_cols, num_rows, cell_size):
+    process_moves(moves, rows, knight_x, knight_y, cell_size, num_cols, num_rows)
 
 
 def get_board(board_x, board_y, knight_x, knight_y):
@@ -203,7 +216,8 @@ def get_board(board_x, board_y, knight_x, knight_y):
     game_board = [border]
 
     rows = get_rows(board_y, board_x, cell_size, knight_x, knight_y)
-    process_rows(rows, knight_x, knight_y, board_y, board_x, cell_size)
+    moves = get_possible_moves(knight_x, knight_y, board_x, board_y)
+    process_rows(moves, rows, knight_x, knight_y, board_y, board_x, cell_size)
     game_board.extend(rows)
 
     game_board.append(border)
