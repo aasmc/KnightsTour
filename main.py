@@ -1,38 +1,36 @@
-def print_error_message(message):
-    print(message)
-
-
 def prompt_user_for_dimensions(message, is_knight_position, board_x=-1, board_y=-1):
     """Prompts user for dimensions of the chess board or knight position depending on flag
     is_knight_position. Checks the input for correctness. If input is incorrect, repeats
     the prompt. Dimensions must be positive integers. Returns a tuple of (x, y) dimensions."""
-    error_message = "Invalid position!" if is_knight_position else "Invalid dimensions!"
+    error_message = "Invalid position!" \
+        if is_knight_position \
+        else "Invalid dimensions!"
     while True:
         numbers = input(message).split()
         if len(numbers) > 2 or len(numbers) < 2:
-            print_error_message(error_message)
+            print(error_message)
             continue
         x_str = numbers[0]
         y_str = numbers[1]
         if not x_str.isdigit() or not y_str.isdigit():
-            print_error_message(error_message)
+            print(error_message)
             continue
         try:
             x = int(x_str)
             y = int(y_str)
             if x < 0 or y < 0:
-                print_error_message(error_message)
+                print(error_message)
                 continue
             else:
                 if is_knight_position:
                     if x < 1 or y < 1 or x > board_x or y > board_y:
-                        print_error_message(error_message)
+                        print(error_message)
                         continue
                     else:
                         return (x, y)
                 return (x, y)
         except ValueError:
-            print_error_message(error_message)
+            print(error_message)
             continue
 
 
@@ -73,14 +71,127 @@ def get_row_leading_space(number_of_rows, row_number):
     return str(" " * diff)
 
 
-def get_row(row_number, cell_size, number_of_columns, number_of_rows, knight_position=-1):
+def get_row(
+        row_number,
+        cell_size,
+        number_of_columns,
+        number_of_rows,
+        symbol,
+        knight_position=-1):
     leading_space = get_row_leading_space(number_of_rows, row_number)
     row = f"{leading_space}{row_number}| "
     for i in range(1, number_of_columns + 1):
-        cell = str(" " * (cell_size - 1)) + "X " if i == knight_position else str("_" * cell_size) + " "
+        cell = str(" " * (cell_size - 1)) + f"{symbol} " \
+            if i == knight_position \
+            else str("_" * cell_size) + " "
         row = f"{row}{cell}"
     row = f"{row}|"
     return row
+
+
+def get_rows(number_of_rows, number_of_cols, cell_size, knight_x, knight_y):
+    rows = []
+    for i in range(number_of_rows, 0, -1):
+        row = get_row(i, cell_size, number_of_cols, number_of_rows, "X", knight_x) \
+            if knight_y == i \
+            else get_row(i, cell_size, number_of_cols, number_of_rows, "X")
+        rows.append(row)
+    return rows
+
+
+def check_moves(x, y, max_row, max_col, direction):
+    if direction == "FORWARD_LEFT":
+        return check_pos(x - 1, max_row) and check_pos(y + 2, max_col)
+    elif direction == "LEFT_FORWARD":
+        return check_pos(x - 2, max_row) and check_pos(y + 1, max_col)
+    elif direction == "LEFT_BACK":
+        return check_pos(x - 2, max_row) and check_pos(y - 1, max_col)
+    elif direction == "BACK_LEFT":
+        return check_pos(x - 1, max_row) and check_pos(y - 2, max_col)
+    elif direction == "BACK_RIGHT":
+        return check_pos(x + 1, max_row) and check_pos(y - 2, max_col)
+    elif direction == "RIGHT_BACK":
+        return check_pos(x + 2, max_row) and check_pos(y - 1, max_col)
+    elif direction == "RIGHT_FORWARD":
+        return check_pos(x + 2, max_row) and check_pos(y + 1, max_col)
+    elif direction == "FORWARD_RIGHT":
+        return check_pos(x + 1, max_row) and check_pos(y + 2, max_col)
+
+
+def check_pos(move, limit):
+    return 1 <= move <= limit
+
+
+POSSIBLE_DIRECTIONS = [
+    "FORWARD_LEFT",
+    "LEFT_FORWARD",
+    "LEFT_BACK",
+    "BACK_LEFT",
+    "BACK_RIGHT",
+    "RIGHT_BACK",
+    "RIGHT_FORWARD",
+    "FORWARD_RIGHT"
+]
+
+
+def get_possible_moves(initial_x, initial_y, max_rows, max_cols):
+    moves = []
+    for direction in POSSIBLE_DIRECTIONS:
+        if check_moves(initial_x, initial_y, max_rows, max_cols, direction):
+            moves.append(direction)
+    return moves
+
+
+def get_new_row(old_row, new_knight_pos, cell_size, max_row, symbol):
+    distance_until_knight = len(str(max_row)) + 2 + (new_knight_pos - 1) * (cell_size + 1)
+    before = old_row[:distance_until_knight]
+    after = old_row[distance_until_knight + cell_size:]
+    space = str(" " * (cell_size - 1))
+    new_row = f"{before}{space}{symbol}{after}"
+    return new_row
+
+
+def process_moves(moves, rows, knight_x, knight_y, cell_size, num_rows, num_cols):
+    row_index = -1
+    new_knight_pos = -1
+    for move in moves:
+        if move == "FORWARD_LEFT":
+            row_index = knight_y + 2
+            new_knight_pos = knight_x - 1
+        elif move == "LEFT_FORWARD":
+            row_index = knight_y + 1
+            new_knight_pos = knight_x - 2
+        elif move == "LEFT_BACK":
+            row_index = knight_y - 1
+            new_knight_pos = knight_x - 2
+        elif move == "BACK_LEFT":
+            row_index = knight_y - 2
+            new_knight_pos = knight_x - 1
+        elif move == "BACK_RIGHT":
+            row_index = knight_y - 2
+            new_knight_pos = knight_x + 1
+        elif move == "RIGHT_BACK":
+            row_index = knight_y - 1
+            new_knight_pos = knight_x + 2
+        elif move == "RIGHT_FORWARD":
+            row_index = knight_y + 1
+            new_knight_pos = knight_x + 2
+        elif move == "FORWARD_RIGHT":
+            row_index = knight_y + 2
+            new_knight_pos = knight_x + 1
+        old_row = rows[-row_index]
+        new_row = get_new_row(
+            old_row,
+            new_knight_pos,
+            cell_size,
+            num_cols,
+            "O")
+        rows[-row_index] = new_row
+
+
+def process_rows(rows, knight_x, knight_y, num_cols, num_rows, cell_size):
+    moves = get_possible_moves(knight_x, knight_y, num_rows, num_cols)
+    process_moves(moves, rows, knight_x, knight_y, cell_size, num_rows, num_cols)
 
 
 def get_board(board_x, board_y, knight_x, knight_y):
@@ -90,11 +201,11 @@ def get_board(board_x, board_y, knight_x, knight_y):
     bottom_legend = get_bottom_legend(board_x, cell_size)
 
     game_board = [border]
-    for i in range(board_y, 0, -1):
-        row = get_row(i, cell_size, board_x, board_y, knight_x)\
-            if knight_y == i \
-            else get_row(i, cell_size, board_x, board_y)
-        game_board.append(row)
+
+    rows = get_rows(board_y, board_x, cell_size, knight_x, knight_y)
+    process_rows(rows, knight_x, knight_y, board_y, board_x, cell_size)
+    game_board.extend(rows)
+
     game_board.append(border)
     game_board.append(bottom_legend)
     return game_board
@@ -106,13 +217,19 @@ def print_board(game_board):
 
 
 def play_game():
-    board_dimensions = prompt_user_for_dimensions("Enter your board dimensions:", False)
+    board_dimensions = prompt_user_for_dimensions("Enter your board dimensions:",
+                                                  False)
     knight_pos = prompt_user_for_dimensions(
         "Enter the knight's starting position:",
         True,
         board_dimensions[0],
         board_dimensions[1])
-    board = get_board(board_dimensions[0], board_dimensions[1], knight_pos[0], knight_pos[1])
+    board = get_board(
+        board_dimensions[0],
+        board_dimensions[1],
+        knight_pos[0],
+        knight_pos[1])
+    print("\nHere are the possible moves:")
     print_board(board)
 
 

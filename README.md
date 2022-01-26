@@ -123,3 +123,67 @@ Enter the knight's starting position: > 5 5
   -------------------------------------------
       1   2   3   4   5   6   7   8   9  10
 ```
+
+## Stage III
+## Objectives
+In this stage, you should modify your program to do the following:
+
+- Check all 8 possible moving directions from the starting position.
+- If the move is possible, mark the landing position with the letter 'O'.
+- If the move is not possible, no action is required.
+
+Don't forget that column and row numbers, as well as the knight position and 
+the 'O' letter for the landing position, should be aligned to the right. For 
+example, for a three-symbols long placeholder, the landing position should look 
+like O.
+
+Please, don't forget about functional decomposition: splitting your code into 
+reusable functions is very important for the next stages.
+
+## Examples
+The greater-than symbol followed by space (> ) represents the user input. Note 
+that it's not part of the input.
+
+### Example 1
+```text
+Enter your board dimensions: > 6 5
+Enter the knight's starting position: > 4 2
+
+Here are the possible moves:
+ ---------------------
+5| __ __ __ __ __ __ |
+4| __ __  O __  O __ |
+3| __  O __ __ __  O |
+2| __ __ __  X __ __ |
+1| __  O __ __ __  O |
+ ---------------------
+    1  2  3  4  5  6
+```
+
+### Example 2
+```text
+Enter your board dimensions: > 3 4
+Enter the knight's starting position: > 2 2
+
+Here are the possible moves:
+ ------------
+4|  O __  O |
+3| __ __ __ |
+2| __  X __ |
+1| __ __ __ |
+ ------------
+    1  2  3
+```
+
+### Example 3
+```text
+Enter your board dimensions: > 1 2
+Enter the knight's starting position: > 1 2
+
+Here are the possible moves:
+ -----
+2| X |
+1| _ |
+ -----
+   1
+```
