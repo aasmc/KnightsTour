@@ -250,3 +250,135 @@ Here are the possible moves:
  -----
    1
 ```
+
+## Stage V
+
+Try and beat this puzzle! Your program should now allow multiple moves and mark the squares you have already visited.
+
+The task is quite hard, and you may want to use Warnsdorff's rule to complete it. Using the rule alone doesn't guarantee 
+that you will win, so you can dismiss it if you prefer. Bear in mind that not every board may have a solution!
+
+## Objectives
+
+In this stage, you should modify your program to do the following:
+
+- Set up a board.
+- Display the board status and the number of possible moves using Warnsdorff's rule.
+- Prompt the player for the knight's move.
+- Check whether the move is valid. If not, ask the player for another move.
+- Move the knight and mark the position with an 'X'. Mark the visited squares with an '*'.
+- Repeat the above step until there are no more possible moves.
+- If the player visits every square without repetition, congratulate them on their victory!
+- If the player loses, print the number of moves they made.
+
+Please, try to organize your code well, split it into functions and methods, and make them reusable: the difficulty of 
+the next stage greatly depends on this. Its implementation will involve the feature of solving the puzzle automatically.
+This is not an easy task if your code isn't split into functions. 
+
+## Examples:
+
+### Example 1
+```text
+Enter your board dimensions: > 4 4
+Enter the knight's starting position: > 2 2
+ ---------------
+4|  1 __  2 __ |
+3| __ __ __  2 |
+2| __  X __ __ |
+1| __ __ __  1 |
+ ---------------
+    1  2  3  4
+
+Enter your next move: > 2 2
+Invalid move! Enter your next move: > 4 1
+ ---------------
+4| __ __ __ __ |
+3| __ __  3 __ |
+2| __  * __ __ |
+1| __ __ __  X |
+ ---------------
+    1  2  3  4
+
+Enter your next move: > 3 3
+ ---------------
+4|  0 __ __ __ |
+3| __ __  X __ |
+2|  2  * __ __ |
+1| __  2 __  * |
+ ---------------
+    1  2  3  4
+
+Enter your next move: > 1 4
+ ---------------
+4|  X __ __ __ |
+3| __ __  * __ |
+2| __  * __ __ |
+1| __ __ __  * |
+ ---------------
+    1  2  3  4
+
+No more possible moves!
+Your knight visited 4 squares!
+```
+
+### Example 2
+```text
+Enter your board dimensions: > 5 4
+Enter the knight's starting position: > 1 4
+ ------------------
+4|  X __ __ __ __ |
+3| __ __  5 __ __ |
+2| __  3 __ __ __ |
+1| __ __ __ __ __ |
+ ------------------
+    1  2  3  4  5
+
+Enter your next move: > 2 2
+ ------------------
+4|  * __  3 __ __ |
+3| __ __ __  3 __ |
+2| __  X __ __ __ |
+1| __ __ __  2 __ |
+ ------------------
+    1  2  3  4  5
+
+Enter your next move: > 4 1
+ ------------------
+4|  * __ __ __ __ |
+3| __ __  4 __  2 |
+2| __  * __ __ __ |
+1| __ __ __  X __ |
+ ------------------
+    1  2  3  4  5
+
+...
+
+Enter your next move: > 3 1
+ ------------------
+4|  * __  *  *  * |
+3|  *  *  *  *  * |
+2|  1  *  *  *  * |
+1|  *  *  X  *  * |
+ ------------------
+    1  2  3  4  5
+
+Enter your next move: > 1 2
+ ------------------
+4|  *  0  *  *  * |
+3|  *  *  *  *  * |
+2|  X  *  *  *  * |
+1|  *  *  *  *  * |
+ ------------------
+    1  2  3  4  5
+
+Enter your next move: > 2 4
+ ------------------
+4|  *  X  *  *  * |
+3|  *  *  *  *  * |
+2|  *  *  *  *  * |
+1|  *  *  *  *  * |
+ ------------------
+    1  2  3  4  5
+
+What a great tour! Congratulations!
+```
