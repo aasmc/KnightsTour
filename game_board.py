@@ -41,7 +41,7 @@ def get_row_index_knight_pos(move, knight_x, knight_y):
     elif move == "FORWARD_RIGHT":
         row_index = knight_y + 2
         new_knight_pos = knight_x + 1
-    return (row_index, new_knight_pos)
+    return row_index, new_knight_pos
 
 
 def get_possible_moves(initial_x, initial_y, max_rows, max_cols, check_cell, board=None):
