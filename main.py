@@ -99,25 +99,6 @@ def get_rows(number_of_rows, number_of_cols, cell_size, knight_x, knight_y):
     return rows
 
 
-def check_moves(x, y, max_row, max_col, direction):
-    if direction == "FORWARD_LEFT":
-        return check_pos(x - 1, max_row) and check_pos(y + 2, max_col)
-    elif direction == "LEFT_FORWARD":
-        return check_pos(x - 2, max_row) and check_pos(y + 1, max_col)
-    elif direction == "LEFT_BACK":
-        return check_pos(x - 2, max_row) and check_pos(y - 1, max_col)
-    elif direction == "BACK_LEFT":
-        return check_pos(x - 1, max_row) and check_pos(y - 2, max_col)
-    elif direction == "BACK_RIGHT":
-        return check_pos(x + 1, max_row) and check_pos(y - 2, max_col)
-    elif direction == "RIGHT_BACK":
-        return check_pos(x + 2, max_row) and check_pos(y - 1, max_col)
-    elif direction == "RIGHT_FORWARD":
-        return check_pos(x + 2, max_row) and check_pos(y + 1, max_col)
-    elif direction == "FORWARD_RIGHT":
-        return check_pos(x + 1, max_row) and check_pos(y + 2, max_col)
-
-
 def check_pos(move, limit):
     return 1 <= move <= limit
 
@@ -137,7 +118,8 @@ POSSIBLE_DIRECTIONS = [
 def get_possible_moves(initial_x, initial_y, max_rows, max_cols):
     moves = []
     for direction in POSSIBLE_DIRECTIONS:
-        if check_moves(initial_x, initial_y, max_rows, max_cols, direction):
+        (row_index, knight_pos) = get_row_index_knight_pos(direction, initial_x, initial_y)
+        if check_pos(knight_pos, max_cols) and check_pos(row_index, max_rows):
             moves.append(direction)
     return moves
 
@@ -193,7 +175,7 @@ def process_moves(moves, rows, knight_x, knight_y, cell_size, num_cols, num_rows
             row_index,
             num_rows,
             num_cols)
-        symbol = len(symbol) - 1
+        symbol = len(symbol) - 1  # shouldn't include previous position, so subtract 1
         new_row = get_new_row(
             old_row,
             new_knight_pos,
@@ -201,10 +183,6 @@ def process_moves(moves, rows, knight_x, knight_y, cell_size, num_cols, num_rows
             num_cols,
             symbol)
         rows[-row_index] = new_row
-
-
-def process_rows(moves, rows, knight_x, knight_y, num_cols, num_rows, cell_size):
-    process_moves(moves, rows, knight_x, knight_y, cell_size, num_cols, num_rows)
 
 
 def get_board(board_x, board_y, knight_x, knight_y):
@@ -216,8 +194,8 @@ def get_board(board_x, board_y, knight_x, knight_y):
     game_board = [border]
 
     rows = get_rows(board_y, board_x, cell_size, knight_x, knight_y)
-    moves = get_possible_moves(knight_x, knight_y, board_x, board_y)
-    process_rows(moves, rows, knight_x, knight_y, board_y, board_x, cell_size)
+    moves = get_possible_moves(knight_x, knight_y, board_y, board_x)
+    process_moves(moves, rows, knight_x, knight_y, cell_size, board_x, board_y)
     game_board.extend(rows)
 
     game_board.append(border)
