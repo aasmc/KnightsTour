@@ -31,7 +31,7 @@ def prompt_user_for_dimensions(message, is_knight_position, board_x=-1, board_y=
         try:
             x = int(numbers[0])
             y = int(numbers[1])
-            if x < 0 or y < 0:
+            if x < 1 or y < 1:
                 print(error_message)
                 continue
             else:
@@ -174,6 +174,17 @@ def prompt_user_for_moves(board):
         print(message)
 
 
+def prompt_user_for_puzzle():
+    while True:
+        decision = input("Do you want to try the puzzle? (y/n):")
+        if decision == "y":
+            return True
+        elif decision == "n":
+            return False
+        else:
+            print("Invalid input!")
+
+
 def play_game():
     board_dimensions = prompt_user_for_dimensions("Enter your board dimensions:",
                                                   False)
@@ -196,5 +207,15 @@ def play_game():
         x,
         y)
 
-    board.show_possible_moves(x, y, True, False)
-    prompt_user_for_moves(board=board)
+    if prompt_user_for_puzzle():
+        if board.has_solution(x, y):
+            board.show_possible_moves(x, y, True)
+            prompt_user_for_moves(board=board)
+        else:
+            print("No solution exists!")
+    else:
+        if board.has_solution(x, y):
+            print("\nHere's the solution!")
+            board.show_solution(x, y)
+        else:
+            print("No solution exists!")

@@ -16,7 +16,8 @@ class Cell:
         if self.empty:
             return str("_" * self.size) + " "
         else:
-            space = str(" " * (self.size - 1))
+            symbol_len = len(self.symbol)
+            space = str(" " * (self.size - symbol_len))
             return f"{space}{self.symbol} "
 
 
