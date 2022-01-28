@@ -214,8 +214,8 @@ def play_game():
         else:
             print("No solution exists!")
     else:
-        if board.has_solution(x, y):
+        if board.solve_on_board(x, y, 1):
             print("\nHere's the solution!")
-            board.show_solution(x, y)
+            board.show_solution()
         else:
             print("No solution exists!")

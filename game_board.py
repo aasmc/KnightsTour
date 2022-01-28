@@ -164,8 +164,7 @@ class Board:
                and 0 <= next_y < self.num_rows \
                and board[next_y][next_x] == -1
 
-    def show_solution(self, knight_x, knight_y):
-        self.solve_on_board(knight_x, knight_y, self.num_moves)
+    def show_solution(self):
         print(self)
 
     def solve_on_board(self, knight_x, knight_y, num_moves):
